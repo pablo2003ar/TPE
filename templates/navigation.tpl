@@ -26,3 +26,4 @@
         </div>
     </div>
 </nav>
+{include file="templates/menu-info.tpl"}

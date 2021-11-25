@@ -26,6 +26,8 @@ class ProductModel
 
     function deleteProduct($id)
     {
+        $query = $this->db->prepare('DELETE FROM `comentario` WHERE `id_producto` = ?');
+        $query->execute([$id]);
         $query = $this->db->prepare('DELETE FROM `producto` WHERE id = ?');
         $query->execute([$id]);
     }
@@ -47,7 +49,8 @@ class ProductModel
         $query->execute([$name, $price, $mark, $category, $id]);
     }
 
-    function getProductsByCategory($category) {
+    function getProductsByCategory($category)
+    {
         $query = $this->db->prepare('SELECT p.id, p.descripcion, p.precio, m.nombre as marca, c.nombre as categoria FROM `producto` p 
         INNER JOIN `marca` m ON p.id_marca = m.id_marca 
         INNER JOIN `categoria` c ON p.id_categoria = c.id_categoria
@@ -55,5 +58,16 @@ class ProductModel
         $query->execute([$category]);
         $product = $query->fetchAll(PDO::FETCH_OBJ);
         return $product;
+    }
+
+    function getProductsByParams($desc)
+    {
+        $query = $this->db->prepare('SELECT p.id, p.descripcion, p.precio, m.nombre as marca, c.nombre as categoria FROM `producto` p 
+        INNER JOIN `marca` m ON p.id_marca = m.id_marca 
+        INNER JOIN `categoria` c ON p.id_categoria = c.id_categoria
+        WHERE p.`descripcion` LIKE ?');
+        $query->execute([$desc]);
+        $products = $query->fetchAll(PDO::FETCH_OBJ);
+        return $products;
     }
 }

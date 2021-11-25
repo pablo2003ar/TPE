@@ -6,10 +6,10 @@ require_once "controllers/home.controller.php";
 require_once "controllers/user.controller.php";
 require_once "controllers/auth.controller.php";
 
-
 define('BASE_URL', '//' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']) . '/');
 define('ADMIN', '//' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']) . '/administracion');
 define('LOGIN', '//' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']) . '/login');
+define('USUARIOS', '//' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']) . '/usuarios');
 
 if (!empty($_GET['action'])) {
     $action = $_GET['action'];
@@ -63,6 +63,34 @@ switch ($params[0]) {
     case 'logout':
         $authController = new AuthController();
         $authController->logout();
+        break;
+    case 'usuarios':
+        $workAreaController = new WorkAreaController();
+        $workAreaController->showUsers();
+        break;
+    case 'usuario':
+        switch ($params[1]) {
+            case 'eliminar':
+                $userController = new UserController();
+                $userController->delete($params[2]);
+                break;
+            case 'conceder_permisos':
+                $userController = new UserController();
+                $userController->givePermissions($params[2]);
+                break;
+            case 'quitar_permisos':
+                $userController = new UserController();
+                $userController->removePermissions($params[2]);
+                break;
+            default:
+                echo "Error";
+                break;
+        }
+        break;
+
+    case 'buscar':
+        $homeController = new HomeController();
+        $homeController->search();
         break;
     default:
         echo "Error";

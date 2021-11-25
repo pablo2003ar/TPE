@@ -5,7 +5,7 @@
       
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control" id="exampleInputEmail1" value="{if $category}{$category->nombre}{/if}">
+        <input type="text" name="nombre" class="form-control" id="exampleInputEmail1" value="{if $category}{$category->nombre}{/if}" required>
         <div class="form-text">Ingrese el nombre de la Categoria.</div>
       </div>
       

@@ -16,6 +16,8 @@ class WorkAreaController
     private $trademarkModel;
     private $workareaView;
     private $authHelper;
+    private $userModel;
+    private $userView;
 
     public function __construct()
     {
@@ -27,8 +29,11 @@ class WorkAreaController
         $this->workareaView = new WorkAreaView();
         $this->authHelper = new AuthHelper();
 
-        // barrera que este loguead
+        $this->userModel = new UserModel();
+        $this->userView = new UserView();
+
         $this->authHelper->checkLoggedIn();
+        $this->authHelper->isAdminCheck();
     }
 
     function showArea()
@@ -43,7 +48,16 @@ class WorkAreaController
         $this->workareaView->showFooter();
     }
 
-    function showFilter() {
+    function showUsers()
+    {
+        // $users = $this->userModel->getAllUsers();
+        // echo $_SESSION['USER_ROL'];
+        $users = $this->userModel->getAll();
+        $this->userView->renderList($users);
+    }
+
+    function showFilter()
+    {
         $products = $this->getProducts();
         $categories = $this->categoryModel->getCategories();
 
@@ -55,7 +69,8 @@ class WorkAreaController
         $this->workareaView->showFooter();
     }
 
-    function getProducts() {
+    function getProducts()
+    {
         if (isset($_REQUEST['categoria']) && !empty($_REQUEST['categoria'])) {
             $products = $this->productModel->getProductsByCategory($_REQUEST['categoria']);
         } else {
@@ -63,4 +78,5 @@ class WorkAreaController
         }
         return $products;
     }
+
 }

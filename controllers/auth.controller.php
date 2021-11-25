@@ -2,33 +2,47 @@
 require_once "./models/user.model.php";
 require_once "./views/auth.view.php";
 require_once './helpers/AuthHelper.php';
+require_once './api/api.view.php';
 
-class AuthController {
+class AuthController
+{
     private $userModel;
     private $authView;
     private $authHelper;
 
-    public function __construct() {
+    // private $apiView;
+
+    public function __construct()
+    {
         $this->userModel = new UserModel();
         $this->authView = new AuthView();
         $this->authHelper = new AuthHelper();
+
+        // $this->apiView = new ApiView();
     }
 
-    public function showLogin() {
+    public function showLogin()
+    {
+        $islogged = $this->authHelper->isLogged();
+        if ($islogged) {
+            /*
+            $this->authHelper->redirect();
+            */
+            $this->authHelper->redirection(BASE_URL);
+        }
+
         $this->authView->renderForm();
     }
 
-    public function login() {
+    public function login()
+    {
         if (!empty($_POST['email']) && !empty($_POST['password'])) {
+
             $email = $_POST['email'];
             $password = $_POST['password'];
-     
-            // Obtengo el usuario de la base de datos
-            $user = $this->userModel->getUser($email);
-     
-            // Si el usuario existe y las contraseñas coinciden
+            $user = $this->userModel->getUserByEmail($email);
+
             if ($user && password_verify($password, $user->password)) {
-                 // armo la sesion del usuario
                 $this->authHelper->login($user);
                 header("Location: " . ADMIN);
             } else {
@@ -37,7 +51,9 @@ class AuthController {
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->authHelper->logout();
     }
+
 }

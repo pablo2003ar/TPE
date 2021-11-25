@@ -5,12 +5,12 @@
       
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Nombre</label>
-        <input type="text" name="descripcion" class="form-control" id="exampleInputEmail1" value="{if $product}{$product->descripcion}{/if}">
+        <input type="text" name="descripcion" class="form-control" id="exampleInputEmail1" value="{if $product}{$product->descripcion}{/if}" required>
         <div class="form-text">Ingrese el nombre del producto.</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Precio</label>
-        <input type="float" name="precio" class="form-control" id="exampleInputPassword1" value="{if $product}{$product->precio}{/if}">
+        <input type="float" name="precio" class="form-control" id="exampleInputPassword1" value="{if $product}{$product->precio}{/if}" required>
         <div class="form-text">Ingrese el precio del producto.</div>
       </div>
       <div class="mb-3">

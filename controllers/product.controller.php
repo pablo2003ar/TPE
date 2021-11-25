@@ -22,8 +22,8 @@ class ProductController
         $this->view = new ProductView();
         $this->authHelper = new AuthHelper();
 
-        // barrera que este loguead
         $this->authHelper->checkLoggedIn();
+        $this->authHelper->isAdminCheck();
     }
 
     public function showProduct()
@@ -35,11 +35,13 @@ class ProductController
     public function showForm($action, $id = null)
     {
         $product = null;
+
         if (!empty($id)) {
             // $action = 'producto/modificar/' . $id;
             $action .= $id;
             $product = $this->model->getProductByID($id);
         }
+
         $trademarks = $this->trademarkModel->getTrademarks();
         $categories = $this->categoryModel->getCategories();
         $this->view->renderForm($action, $product, $trademarks, $categories);
@@ -47,20 +49,25 @@ class ProductController
 
     function insert()
     {
+        $this->validate();
+
         $name = $_REQUEST['descripcion'];
-        $price = $_REQUEST['precio'];
+        $price = intval($_REQUEST['precio']);
         $mark = $_REQUEST['marca'];
         $category = $_REQUEST['categoria'];
 
         $this->model->insertProduct($name, $price, $mark, $category);
 
-        // header("Location: " . BASE_URL);
         header("Location: " . ADMIN);
     }
 
     function delete($id)
     {
-        $this->model->deleteProduct($id);
+        $product = $this->model->getProductByID($id);
+
+        if ($product) {
+            $this->model->deleteProduct($id);
+        }
 
         header("Location: " . ADMIN);
     }
@@ -68,13 +75,32 @@ class ProductController
 
     function update($id)
     {
+        $this->validate();
+        
         $name = $_REQUEST['descripcion'];
         $price = $_REQUEST['precio'];
         $mark = $_REQUEST['marca'];
         $category = $_REQUEST['categoria'];
 
         $this->model->updateProduct($id, $name, $price, $mark, $category);
-
+        
         header("Location: " . ADMIN);
+    }
+
+    public function validate()
+    {
+        if (
+            empty($_REQUEST['descripcion']) ||
+            empty($_REQUEST['precio']) ||
+            empty($_REQUEST['marca']) ||
+            empty($_REQUEST['categoria'])
+        ) {
+            $this->authHelper->redirection(ADMIN);
+        }
+
+        if (!is_numeric($_REQUEST['precio']) || $_REQUEST['precio'] < 0) {
+            $this->authHelper->redirection(ADMIN);
+
+        }
     }
 }

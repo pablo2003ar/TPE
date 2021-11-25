@@ -4,7 +4,7 @@
 
     <main class="form-signin">
         <form action="verificar" method="POST">
-            <h1 class="h2 mb-3 fw-normal">Administración</h1>
+            <h1 class="h2 mb-3 fw-normal">Login</h1>
 
             <div class="m-2 form-floating">
                 <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com"

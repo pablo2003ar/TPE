@@ -10,4 +10,9 @@ class UserView {
     function renderForm() {
         $this->smarty->display('templates/formUser.tpl');
     }
+
+    function renderList($users) {
+        $this->smarty->assign('users', $users);
+        $this->smarty->display('templates/user-list.tpl');
+    }
 }

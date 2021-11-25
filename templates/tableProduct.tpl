@@ -19,7 +19,12 @@
                     <td>{$product->descripcion}</td>
                     <td>{$product->precio}</td>
                     <td>{$product->marca}</td>
-                    <td>{$product->categoria}</td>
+                    {if $product->categoria}
+                        <td>{$product->categoria}</td>
+                    {else}
+                        <td>Sin Categoria</td>
+                    {/if}
+                    
                     <td>
                         <div class="d-flex justify-content-evenly">
                             <a class="btn btn-warning" href="producto/formulario/modificar/{$product->id}" role="button">Editar</a>
